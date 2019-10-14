@@ -1,0 +1,207 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname project-code-export) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+; PROBLEM:
+; 
+; Design a World Program with Compound Data. You can be as creative as you like,
+; but keep it simple. Above all, follow the recipes! You must also stay within
+; the scope of the first part of the course. Do not use language features we
+; have not seen in the videos. Remember, your peers are going to be grading you.
+; If you use features they have never seen your grade will probably suffer.
+; 
+; If you need inspiration, you can choose to create a simple text editor, like a
+; Google search bar, as demonstrated in the video below. Another idea is a
+; program that allows you to click on a spot on the screen to create a flower,
+; which then grows over time. If you click again the first flower is replaced by
+; a new one at the new position.
+; 
+; You should do all your design work in DrRacket. Following the step-by-step
+; recipe in DrRacket will help you be sure that you have a quality solution.
+; 
+; Note that if you paste in images from DrRacket, they will not show up in the
+; EdX assessment tool. Instead, define all of your images using image primitives
+; (rectangle, circle, etc.). 
+; 
+
+
+(require 2htdp/image)
+(require 2htdp/universe)
+
+;; Create a flower on mouse click position that contiuously grows until
+;; the user makes a new mouse click, then repeat
+
+;; =================
+;; Constants:
+
+(define WIDTH  800)
+(define HEIGHT 600)
+
+(define MTS (rectangle WIDTH HEIGHT "solid" "LightSkyBlue"))
+
+(define STEM-COLOR "green")
+(define STEM-WIDTH (/ WIDTH 40))
+
+(define HEAD-CIRCLE-COLOR "yellow")
+(define HEAD-PETALS-COLOR "red")
+
+(define START-STEM-HEIGHT      20)
+(define START-HEAD-CIRCLE-SIZE 20)
+(define START-HEAD-PETALS-SIZE 60)
+
+
+
+
+;; =================
+;; Data definitions:
+
+(define-struct flower (x y growth))
+;; Flower is (make-flower Integer Integer Growth)
+;; interp. a flower at position x, y at a certain growth stage
+;;  (see data type Growth and fn. grown-flower)
+
+(define FLOWER-1 (make-flower 10 20 0))
+(define FLOWER-2 (make-flower 10 20 2))
+(define FLOWER-3 (make-flower 44 58 7))
+
+#;
+(define (fn-for-flower f)
+  (... (flower-x f)          ;Integer
+       (flower-y f)          ;Integer
+       (flower-growth f)))   ;Natural
+
+;; Template rules used:
+;;  - compound: 3 fields
+
+
+
+;; Growth is Integer
+;; interp. the level of growth of a flower
+
+(define G1 0)   ;starting stage
+(define G2 7)
+
+#;
+(define (fn-for-growth g)
+  (... g))
+
+;; Template rules used:
+;;  - atomic non-distinct: Natural
+
+
+
+
+;; =================
+;; Functions:
+
+;; Flower -> Flower
+;; start the world with (main (make-flower (/ WIDTH 2) HEIGHT 0))
+;;  to create a flower in the middle and start growing it; click
+;;  mouse button anywhere for a new flower
+
+(define (main f) 
+  (big-bang f                           ; Flower
+            (on-tick   next-flower)     ; Flower -> Flower
+            (to-draw   render-flower)   ; Flower -> Image
+            (on-mouse  new-flower)))    ; Flower Integer Integer MouseEvent -> Flower
+
+
+
+;; Flower -> Flower
+;; produce the next flower
+
+(check-expect (next-flower (make-flower 10 10 0))
+              (make-flower 10 10 1))
+(check-expect (next-flower FLOWER-2) (make-flower 10 20 3))
+
+;(define (next-flower f) FLOWER-1)  ;stub
+
+;<template from Flower>
+(define (next-flower f)
+  (make-flower (flower-x f) (flower-y f)
+       (+ 1 (flower-growth f))))
+
+
+
+
+;; Flower -> Image
+;; render image of current flower and place it on the MTS
+(check-expect (render-flower FLOWER-1)
+              (place-image/align
+               (grown-flower (flower-growth FLOWER-1))
+               (flower-x FLOWER-1) (flower-y FLOWER-1)  "center" "bottom"
+               MTS))
+(check-expect (render-flower (make-flower 40 40 10))
+              (place-image/align
+               (grown-flower (flower-growth (make-flower 40 40 10)))
+               40 40 "center" "bottom"
+               MTS))
+
+;(define (render-flower f) MTS)  ;stub
+
+;<template from Flower>
+(define (render-flower f)
+  (place-image/align
+   (grown-flower (flower-growth f))
+   (flower-x f) (flower-y f)  "center" "bottom"
+   MTS))
+
+
+
+;; Flower Integer Integer MouseEvent -> Flower
+;; start growing new flower on mouse click
+(check-expect (new-flower FLOWER-1 20 20 "button-down")
+              (make-flower 20 20 0))
+(check-expect (new-flower FLOWER-1 20 20 "button-up")
+              FLOWER-1)
+
+;(define (new-flower f x y me) f)  ;stub
+
+;<template from handle-mouse>
+(define (new-flower f x y me)
+  (cond [(mouse=? me "button-down") (make-flower x y 0)]
+        [else f]))
+
+
+
+;; Growth -> Image
+;; takes a growth level and returns an image of a flower at this level
+(check-expect (grown-flower 0)
+              (above (overlay (circle START-HEAD-CIRCLE-SIZE "solid"
+                                      HEAD-CIRCLE-COLOR)
+                              (pulled-regular-polygon
+                               START-HEAD-PETALS-SIZE 3 1.8 30 "solid"
+                               HEAD-PETALS-COLOR)
+                              (rotate 180 (pulled-regular-polygon
+                                           START-HEAD-PETALS-SIZE
+                                           3 1.8 30 "solid"
+                                           HEAD-PETALS-COLOR)))
+                     (rectangle STEM-WIDTH START-STEM-HEIGHT
+                                "solid" STEM-COLOR)))
+
+(check-expect (grown-flower 7)
+              (above (overlay (circle (+ 7 START-HEAD-CIRCLE-SIZE)
+                                      "solid" HEAD-CIRCLE-COLOR)
+                              (pulled-regular-polygon
+                               (+ 21 START-HEAD-PETALS-SIZE)
+                               3 1.8 30 "solid" HEAD-PETALS-COLOR)
+                              (rotate 180 (pulled-regular-polygon
+                                           (+ 21 START-HEAD-PETALS-SIZE)
+                                           3 1.8 30 "solid"
+                                           HEAD-PETALS-COLOR)))
+                     (rectangle STEM-WIDTH (+ 14 START-STEM-HEIGHT)
+                                "solid" STEM-COLOR)))
+
+;(define (grown-flower g) (rectangle 0 "solid" "white")) ;stub
+
+;<template from Growth>
+(define (grown-flower g)
+  (above (overlay (circle (+ g START-HEAD-CIRCLE-SIZE) "solid"
+                          HEAD-CIRCLE-COLOR)
+                  (pulled-regular-polygon
+                   (+ (* 3 g) START-HEAD-PETALS-SIZE)
+                   3 1.8 30 "solid" HEAD-PETALS-COLOR)
+                  (rotate 180 (pulled-regular-polygon
+                               (+ (* 3 g) START-HEAD-PETALS-SIZE)
+                               3 1.8 30 "solid" HEAD-PETALS-COLOR)))
+         (rectangle STEM-WIDTH (+ (* 2 g) START-STEM-HEIGHT)
+                    "solid" STEM-COLOR)))
