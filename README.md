@@ -99,7 +99,7 @@
 </tr>
 
 <tr>
-  <td rowspan="4">1</td>
+  <td rowspan="4">5</td>
   <td><strong>Self-Reference</strong></td>
   <td>7</td>
   <td>5-7 Hours</td>
@@ -120,7 +120,7 @@
 </tr>
 
 <tr>
-  <td rowspan="4">2</td>
+  <td rowspan="4">6</td>
   <td><strong>Naturals</strong></td>
   <td>2</td>
   <td>3-4 Hours</td>
@@ -141,7 +141,7 @@
 </tr>
 
 <tr>
-  <td rowspan="4">3</td>
+  <td rowspan="4">7</td>
   <td><strong>Binary Search Trees</strong></td>
   <td>6</td>
   <td>5-6 Hours</td>
@@ -162,7 +162,7 @@
 </tr>
 
 <tr>
-  <td rowspan="4">4</td>
+  <td rowspan="4">8</td>
   <td><strong>Two One-Of Types</strong></td>
   <td>2</td>
   <td>3-5 Hours</td>
@@ -202,7 +202,7 @@
 </tr>
 
 <tr>
-  <td rowspan="2">1</td>
+  <td rowspan="2">9</td>
   <td><strong>Abstraction</strong></td>
   <td>7</td>
   <td>8-12 Hours</td>
@@ -214,7 +214,7 @@
 </tr>
 
 <tr>
-  <td rowspan="4">2</td>
+  <td rowspan="4">10</td>
   <td><strong>Generative Recursion</strong></td>
   <td>3</td>
   <td>5-6 Hours</td>
@@ -235,7 +235,7 @@
 </tr>
 
 <tr>
-  <td rowspan="2">3</td>
+  <td rowspan="2">11</td>
   <td><strong>Accumulators</strong></td>
   <td>5</td>
   <td>9-10 Hours</td>
@@ -247,7 +247,7 @@
 </tr>
 
 <tr>
-  <td rowspan="2">4</td>
+  <td rowspan="2">12</td>
   <td><strong>Graphs</strong></td>
   <td>4</td>
   <td>7-8 Hours</td>
