@@ -1,0 +1,54 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. bobble-evaluation-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+;; bobble-evaluation-starter.rkt
+
+; PROBLEM:
+; 
+; Given the following function definition:
+; 
+; (define (bobble s)
+;   (if (<= (string-length s) 6)
+;       (string-append s "ible")
+;       s))
+; 
+; Write out the step-by-step evaluation of the expression:
+; 
+; (bobble (substring "fungus" 0 4))
+; 
+; Be sure to show every intermediate evaluation step (including the original expression
+; and the final result, our answer has 7 steps).
+
+
+(define (bobble s)
+  (if (<= (string-length s) 6)
+      (string-append s "ible")
+      s))
+
+;; step 1
+(bobble (substring "fungus" 0 4))
+
+;; step 2
+(bobble "fung")
+
+;; step 3
+(if (<= (string-length "fung") 6)
+    (string-append "fung" "ible")
+    "fung")
+
+;; step 4
+(if (<= 4 6)
+    (string-append "fung" "ible")
+    "fung")
+
+;; step 5
+(if true
+    (string-append "fung" "ible")
+    "fung")
+
+;; step 6
+(string-append "fung" "ible")
+
+;; step 7
+"fungible"
