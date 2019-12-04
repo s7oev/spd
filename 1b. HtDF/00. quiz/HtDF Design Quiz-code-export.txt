@@ -1,0 +1,68 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |HtDF Design Quiz-code-export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require 2htdp/image)
+
+; PROBLEM:
+; 
+; Design a function that consumes two images and produces true 
+; if the first is larger than the second.
+; 
+; Note that limitations of the edX assessment tool mean that
+; you cannot use images directly in your .rkt file. You can of
+; course use image primitives like rectangle. But you cannot
+; paste actual images into your .rkt file for this quiz, even
+; though you normally can do that in BSL. Furthermore,
+; unfortunately the assessment tool does not preserve the
+; indentation of your code. When it comes time for the self-
+; assessment, you can assess your original .rkt file, or copy
+; your submission back into DrRacket and press cmd/ctr-I.
+
+
+;; Signature: Image Image -> Boolean
+;; Purpose: Given two images, produce true if first is of
+;; larger size. Size = width + height
+
+;; Stub:
+;(define (first-img-larger? img1 img2) false)
+
+;; Tests and Examples:
+(check-expect (first-img-larger?
+               (square 20 "solid" "blue")
+               (square 10 "solid" "blue"))
+              true)
+
+(check-expect (first-img-larger?
+               (square 10 "solid" "blue")
+               (square 20 "solid" "blue"))
+              false)
+
+(check-expect (first-img-larger?
+               (square 15 "solid" "blue")
+               (square 15 "solid" "blue"))
+              false)
+
+(check-expect (first-img-larger?
+               (rectangle 20 10 "solid" "blue")
+               (rectangle 10 10 "solid" "blue"))
+              true)
+
+(check-expect (first-img-larger?
+               (rectangle 10 10 "solid" "blue")
+               (rectangle 10 20 "solid" "blue"))
+              false)
+
+(check-expect (first-img-larger?
+               (rectangle 15 15 "solid" "blue")
+               (rectangle 15 15 "solid" "blue"))
+              false)
+
+;; Template:
+;(define (first-img-larger? img1 img2)
+;  (... img1 img2))
+
+;; Body:
+(define (first-img-larger? img1 img2)
+  (> (+ (image-width img1) (image-height img1))
+     (+ (image-width img2) (image-height img2))))
+
