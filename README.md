@@ -5,7 +5,7 @@ s7oev/spd is my proof that I have finished the courses **Systematic Program Desi
 
 So, this repo shows all my work in the two courses, including solutions to the recommended problems, as well as the quizzes. The latter can be design quizzes - in which case my code is shown, or multiple choice - in which case a PDF is attached. Keep in mind that the functional programming language used in this course is Racket-based (which itself is a dialect of Lisp). Because of this, DrRacket is necessary to preview properly the code. I have made exports of my solutions, yet they may have some missing data sometimes - because DrRacket allows the direct input of images, which cannot obviously be achieved in the text-only export. Yet, obviously, the actual code will be perfectly readable from the exports.
 
-Most folders will have the following structure:
+Most folders will have the following structure:  
 1\. **_(problem name)-starter.rkt_** :: problem statement  
 2\. **_(problem name)-solution (mine) export.txt_** :: my solution exported to txt  
 2\. **_(problem name)-solution (mine).rkt_** :: my solution  
