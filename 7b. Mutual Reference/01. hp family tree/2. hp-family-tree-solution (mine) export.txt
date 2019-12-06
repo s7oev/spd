@@ -1,0 +1,176 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname |2. hp-family-tree-solution (mine) export|) (read-case-sensitive #t) (teachpacks ((lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+
+;; hp-family-tree-starter.rkt
+
+; In this problem set you will represent information about descendant family 
+; trees from Harry Potter and design functions that operate on those trees.
+; 
+; To make your task much easier we suggest two things:
+;   - you only need a DESCENDANT family tree
+;   - read through this entire problem set carefully to see what information 
+;     the functions below are going to need. Design your data definitions to
+;     only represent that information.
+;   - you can find all the information you need by looking at the individual 
+;     character pages like the one we point you to for Arthur Weasley.
+; 
+
+
+; PROBLEM 1:
+; 
+; Design a data definition that represents a family tree from the Harry Potter 
+; wiki, which contains all necessary information for the other problems.  You 
+; will use this data definition throughout the rest of the homework.
+; 
+
+
+;; Data definitions:
+
+(define-struct magician (name patronus wand children))
+;; Magician is (make-magician String String String ListOfMagician)
+;; interp. a magician from the HP universe with their name, patronus, the material
+;;         of their wand, and their children and a list of their children
+
+;; ListOfMagician is one of:
+;;   - empty
+;;   - (cons Magician ListOfMagician)
+
+#;
+(define (fn-for-magician m)
+  (... (magician-name m)      ;String
+       (magician-patronus m)  ;String
+       (magician-wand m)      ;String
+       (fn-for-lom (magician-children m))))
+#;
+(define (fn-for-lom lom)
+  (cond [(empty? lom) (...)]
+        [else
+         (... (fn-for-magician (first lom))
+              (fn-for-lom (rest lom)))]))
+
+
+; PROBLEM 2: 
+; 
+; Define a constant named ARTHUR that represents the descendant family tree for 
+; Arthur Weasley. You can find all the infomation you need by starting 
+; at: http://harrypotter.wikia.com/wiki/Arthur_Weasley.
+; 
+; You must include all of Arthur's children and these grandchildren: Lily, 
+; Victoire, Albus, James.
+; 
+; 
+; Note that on the Potter wiki you will find a lot of information. But for some 
+; people some of the information may be missing. Enter that information with a 
+; special value of "" (the empty string) meaning it is not present. Don't forget
+; this special value when writing your interp.
+; 
+
+
+;; Note: as wand information is needed for the last question, and Arthur is
+;;       required to be used as an example, the wand material is stated as
+;;       "Unknown" (when not known) as opposed to "" (empty string). This is
+;;       is the same in the given wikia - while sometimes information about
+;;       the patronus is not there (i.e., missing), wand is always mentioned,
+;;       sometimes stating "Unknown wood" (i.e., info is not missing). Only
+;;       exceptions are Victoire and Lily, whose wands are thus left to be "".
+
+(define VICTOIRE (make-magician "Victoire" "" ""
+                                empty))
+(define BILL     (make-magician "Bill" "Non-corporeal" "Unknown"
+                                (list VICTOIRE)))
+
+(define CHARLIE  (make-magician "Charlie" "Non-corporeal" "Ash"
+                                empty))
+
+(define PERCY    (make-magician "Percy" "Non-corporeal" "Unknown"
+                                empty))
+
+(define FRED     (make-magician "Fred" "Magpie" "Unknown"
+                                empty))
+
+(define GEORGE   (make-magician "George" "Magpie" "Unknown"
+                                empty))
+
+(define RON      (make-magician "Ron" "Jack Russel terrier" "Chestnut"
+                                empty))
+
+(define LILY     (make-magician "Lily" "" ""
+                                empty))
+(define ALBUS    (make-magician "Albus" "" "Unknown"
+                                empty))
+(define JAMES    (make-magician "James" "" "Unknown"
+                                empty))
+(define GINNY    (make-magician "Ginny" "Horse" "Yew"
+                                (list LILY ALBUS JAMES)))
+
+(define ARTHUR   (make-magician "Arthur" "Weasel" "Unknown"
+                                (list BILL CHARLIE PERCY FRED GEORGE RON GINNY)))
+
+; PROBLEM 3:
+; 
+; Design a function that produces a pair list (i.e. list of two-element lists)
+; of every person in the tree and his or her patronus. For example, assuming 
+; that HARRY is a tree representing Harry Potter and that he has no children
+; (even though we know he does) the result would be: (list (list "Harry" "Stag")).
+; 
+; You must use ARTHUR as one of your examples.
+; 
+
+
+;; Magician -> Pair List
+;; ListOfMagician -> Pair List
+;; produce a pair list of every person in the tree and their patronus
+(check-expect (patronus--lom empty) empty)
+(check-expect (patronus--magician GINNY) (list (list "Ginny" "Horse")))
+(check-expect (patronus--magician ARTHUR)
+              (list (list "Arthur" "Weasel") (list "Bill" "Non-corporeal")
+                    (list "Charlie" "Non-corporeal") (list "Percy" "Non-corporeal")
+                    (list "Fred" "Magpie") (list "George" "Magpie")
+                    (list "Ron" "Jack Russel terrier") (list "Ginny" "Horse")))
+
+;(define (patronus--magician m) empty) ;stubs
+;(define (patronus--lom lom) empty)
+
+(define (patronus--magician m)
+  (if (not (string=? (magician-patronus m) ""))
+      (cons (list (magician-name m) (magician-patronus m)) (patronus--lom (magician-children m)))
+      (patronus--lom (magician-children m))))
+
+(define (patronus--lom lom)
+  (cond [(empty? lom) empty]
+        [else
+         (append (patronus--magician (first lom))
+                 (patronus--lom (rest lom)))]))
+
+; PROBLEM 4:
+; 
+; Design a function that produces the names of every person in a given tree 
+; whose wands are made of a given material. 
+; 
+; You must use ARTHUR as one of your examples.
+; 
+
+
+;; String Magician -> ListOfString
+;; String ListOfMagician -> ListOfString
+;; produce the name of every person whose wands are made of the given material
+(check-expect (wand=?--lom "Ash" empty) empty)
+(check-expect (wand=?--magician "Ash" CHARLIE) (list "Charlie"))
+(check-expect (wand=?--magician "Unknown" ARTHUR)
+              (list "Arthur" "Bill" "Percy" "Fred" "George"
+                    "Albus" "James"))
+
+;(define (wand=?--magician mat mag) empty) ;stubs
+;(define (wand=?--lom mat lom) empty)
+
+(define (wand=?--magician mat mag)
+  (if (string=? mat (magician-wand mag))
+      (cons (magician-name mag) (wand=?--lom mat (magician-children mag)))
+      (wand=?--lom mat (magician-children mag))))
+
+(define (wand=?--lom mat lom)
+  (cond [(empty? lom) empty]
+        [else
+         (append (wand=?--magician mat (first lom))
+                 (wand=?--lom mat (rest lom)))]))
