@@ -1,0 +1,36 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. make-box-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require 2htdp/image)
+
+;; make-box-starter.rkt
+
+; 
+; PROBLEM:
+; 
+; You might want to create boxes of different colours.
+; 
+; Use the How to Design Functions (HtDF) recipe to design a function that consumes a color, and creates a 
+; solid 10x10 square of that colour.  Follow the HtDF recipe and leave behind commented out versions of
+; the stub and template.
+; 
+
+
+;; Signature: String -> Image
+;; Purpose: Create a 10x10 square solid colored according to given string
+
+;; Stub:
+;(define (make-box col) (square 10 "solid" "red"))
+
+;; Tests and Examples:
+(check-expect (make-box "red") (square 10 "solid" "red"))
+(check-expect (make-box "yellow") (square 10 "solid" "yellow"))
+(check-expect (make-box "blue") (square 10 "solid" "blue"))
+
+;; Template:
+;(define (make-box col)
+;  (... col))
+
+;; Body
+(define (make-box col)
+  (square 10 "solid" col))
