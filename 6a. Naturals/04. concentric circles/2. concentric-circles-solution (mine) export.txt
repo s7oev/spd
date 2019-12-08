@@ -1,0 +1,73 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. concentric-circles-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require 2htdp/image)
+
+;; concentric-circles-starter.rkt
+
+;  PROBLEM:
+;  
+;  Design a function that consumes a natural number n and a color c, and produces n 
+;  concentric circles of the given color.
+;  
+;  So (concentric-circles 5 "black") should produce .
+;  
+
+
+;; ----------------------------------------
+;; ----------LECTURE DEFINITION------------
+
+;; Natural is one of:
+;;  - 0
+;;  - (add1 Natural)
+;; interp. a natural number
+(define N0 0)         ;0
+(define N1 (add1 N0)) ;1
+(define N2 (add1 N1)) ;2
+
+#;
+(define (fn-for-natural n)
+  (cond [(zero? n) (...)]
+        [else
+         (... n
+              (fn-for-natural (sub1 n)))]))
+
+;; -----------------END--------------------
+;; ----------------------------------------
+
+;; Constants:
+(define EMPTY-IMG (circle 0 "solid" "white"))
+(define CIRCLE-SIZE 7)
+
+
+;; Natural Color -> Image
+;; produce n concentric circles of color c
+(check-expect (concentric-circles 0 "black") EMPTY-IMG)
+
+(check-expect (concentric-circles 1 "black")
+              (overlay
+               (circle CIRCLE-SIZE "outline" "black")
+               EMPTY-IMG))
+
+(check-expect (concentric-circles 2 "black")
+              (overlay
+               (circle (* 2 CIRCLE-SIZE) "outline" "black")
+               (overlay
+                (circle CIRCLE-SIZE "outline" "black")
+                EMPTY-IMG)))
+
+(check-expect (concentric-circles 2 "yellow")
+              (overlay
+               (circle (* 2 CIRCLE-SIZE) "outline" "yellow")
+               (overlay
+                (circle CIRCLE-SIZE "outline" "yellow")
+                EMPTY-IMG)))
+
+;(define (concentric-circles n c) EMPTY-IMG)  ;stub
+
+(define (concentric-circles n c)
+  (cond [(zero? n) EMPTY-IMG]
+        [else
+         (overlay
+          (circle (* n CIRCLE-SIZE) "outline" c)
+              (concentric-circles (sub1 n) c))]))
