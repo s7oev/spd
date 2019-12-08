@@ -1,0 +1,118 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. countdown-animation-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require 2htdp/image)
+(require 2htdp/universe)
+
+;; countdown-animation starter.rkt
+
+; 
+; PROBLEM:
+; 
+; Design an animation of a simple countdown. 
+; 
+; Your program should display a simple countdown, that starts at ten, and
+; decreases by one each clock tick until it reaches zero, and stays there.
+; 
+; To make your countdown progress at a reasonable speed, you can use the 
+; rate option to on-tick. If you say, for example, 
+; (on-tick advance-countdown 1) then big-bang will wait 1 second between 
+; calls to advance-countdown.
+; 
+; Remember to follow the HtDW recipe! Be sure to do a proper domain 
+; analysis before starting to work on the code file.
+; 
+; Once you are finished the simple version of the program, you can improve
+; it by reseting the countdown to ten when you press the spacebar.
+; 
+
+
+;; Countdown animation going from 10 to 0, and after stays at 0
+
+;; =================
+;; Constants:
+
+(define WIDTH  200)
+(define HEIGHT 200)
+
+(define CTR-X (/ WIDTH 2))
+(define CTR-Y (/ HEIGHT 2))
+
+(define MTS (empty-scene WIDTH HEIGHT))
+
+(define FONT-SIZE 24)
+(define FONT-COLOR "black")
+
+;; =================
+;; Data definitions:
+
+;; Countdown is Integer[0, 10]
+;; interp. a decreasing number representing the counting state
+(define C1 10) ; start
+(define C2 7)  ; middle
+(define C3 0)  ; end
+
+#;
+(define (fn-for-countdown cd)
+     (... cd))
+
+;; Template rules used:
+;;  - atomic non-distinct: Integer[0, 10]
+
+
+;; =================
+;; Functions:
+
+;; Countdown -> Countdown
+;; start the world with initial state cd: (main 10)
+(define (main cd)
+  (big-bang cd                          ; Countdown
+            (on-tick   tock 1)          ; Countdown -> Countdown
+            (to-draw   render)          ; Countdown -> Image
+            (on-key    handle-key)))    ; Countdown KeyEvent -> Countdown
+
+;; Countdown -> Countdown
+;; produce the next number in the countdown, by subtracting 1; stop at 0
+(check-expect (tock 7) 6)
+(check-expect (tock 0) 0)
+
+;(define (tock cd) 0) ;stub
+
+;<template from Countdown>
+
+(define (tock cd)
+     (cond [(> cd 0) (- cd 1)]
+           [else cd]))
+
+;; Countdown -> Image
+;; render image with Countdown placed on MTS 
+(check-expect (render 7)
+              (place-image
+               (text "7" FONT-SIZE FONT-COLOR)
+               CTR-X
+               CTR-Y
+               MTS))
+
+;(define (render cd) MTS) ;stub
+
+;<template from Countdown>
+
+(define (render cd)
+     (place-image
+      (text (number->string cd) FONT-SIZE FONT-COLOR)
+      CTR-X
+      CTR-Y
+      MTS))
+
+;; Countdown KeyEvent -> Countdown
+;; interp. on pressing Spacebar, reset the countdown; if countdown is at 10, do nothing
+(check-expect (handle-key 10 " ") 10)
+(check-expect (handle-key 0 " ") 10)
+(check-expect (handle-key 0 "a") 0)
+(check-expect (handle-key 10 "a") 10)
+
+;(define (handle-key c ke) 0)  ;stub
+
+(define (handle-key cd ke)
+     (cond [(and (key=? ke " ") (< cd 10)) 10]
+           [else cd]))
