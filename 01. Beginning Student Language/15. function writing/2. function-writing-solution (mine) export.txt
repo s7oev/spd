@@ -1,0 +1,18 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. function-writing-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+;; function-writing-starter.rkt
+
+; 
+; PROBLEM:
+; 
+; Write a function that consumes two numbers and produces the larger of the two. 
+; 
+
+
+;; note: faulty problem definition; does not inform what to do when results equal
+(define (larger num1 num2)
+  (if (> num1 num2)
+      num1
+      num2))

@@ -1,0 +1,34 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. less-than-five-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+;; less-than-five-starter.rkt
+
+; 
+; PROBLEM:
+; 
+; DESIGN function that consumes a string and determines whether its length is
+; less than 5.  Follow the HtDF recipe and leave behind commented out versions 
+; of the stub and template.
+; 
+
+
+;; Signature: String -> Boolean
+;; Purpose: consume a string and return true if its length < 5 and false otherwise
+
+;; Stub:
+;(define (<five? s) false)
+
+;; Tests and examples:
+(check-expect (<five? "") true)
+(check-expect (<five? "yes") true)
+(check-expect (<five? "nooope") false)
+(check-expect (<five? "12345") false)
+
+;; Template:
+;(define (<five? s)
+;  (... s))
+
+;; Body:
+(define (<five? s)
+  (< (string-length s) 5))

@@ -1,0 +1,67 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. rocket-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+;; rocket-starter.rkt
+
+;; =================
+;; Data definitions:
+
+; 
+; PROBLEM A:
+; 
+; You are designing a program to track a rocket's journey as it descends 
+; 100 kilometers to Earth. You are only interested in the descent from 
+; 100 kilometers to touchdown. Once the rocket has landed it is done.
+; 
+; Design a data definition to represent the rocket's remaining descent. 
+; Call it RocketDescent.
+; 
+
+
+;; RocketDescent is one of:
+;;  - Natural (0, 100]  ;; note: I assumed that the counter will update only with whole numbers
+;;  - "done"
+;; interp. Natural (0, 100] is the number of kilometers left, "done" is displayed after landing
+
+(define RD1 70)
+(define RD2 "done")
+
+#;
+(define (fn-for-rocket-descent rd)
+  (cond [(number? rd) (... rd)]
+        [else (...)]))
+
+;; Template rules used:
+;;  - one of: 2 cases
+;;  - atomic non-distinct: Natural (0, 100]
+;;  - atomic distinct: "done"
+
+;; =================
+;; Functions:
+
+; 
+; PROBLEM B:
+; 
+; Design a function that will output the rocket's remaining descent distance 
+; in a short string that can be broadcast on Twitter. 
+; When the descent is over, the message should be "The rocket has landed!".
+; Call your function rocket-descent-to-msg.
+; 
+
+
+;; RocketDescent -> String
+;; Given rocket's remaining descent, produce a short string with it
+
+;; Tests and Examples:
+(check-expect (rocket-descent-to-msg RD1) "70km left!")
+(check-expect (rocket-descent-to-msg RD2) "The rocket has landed!")
+
+;; Stub:
+;(define (rocket-descent-to-msg rd) "foo")
+
+;; Body:
+;; <template from RocketDescent>
+(define (rocket-descent-to-msg rd)
+  (cond [(number? rd) (string-append (number->string rd) "km left!")]
+        [else "The rocket has landed!"]))

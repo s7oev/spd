@@ -1,0 +1,216 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2.2 spinning-bears-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; spinning-bears-starter.rkt
+
+(require 2htdp/image)
+(require 2htdp/universe)
+
+; 
+; This is the finished spinning-bears program. Check file
+; "2.1 spinning-bears-solution (mine).rkt" for the solution of the first part (marked between
+; the dashes)
+; 
+; PROBLEM:
+; 
+; In this problem you will design another world program. In this program the changing 
+; information will be more complex - your type definitions will involve arbitrary 
+; sized data as well as the reference rule and compound data. But by doing your 
+; design in two phases you will be able to manage this complexity. As a whole, this problem 
+; will represent an excellent summary of the material covered so far in the course, and world 
+; programs in particular.
+; 
+; This world is about spinning bears. The world will start with an empty screen. Clicking
+; anywhere on the screen will cause a bear to appear at that spot. The bear starts out upright,
+; but then rotates counterclockwise at a constant speed. Each time the mouse is clicked on the 
+; screen, a new upright bear appears and starts spinning.
+; 
+; So each bear has its own x and y position, as well as its angle of rotation. And there are an
+; arbitrary amount of bears.
+; 
+; ---------------------------------------------------------------------------------------------
+; To start, design a world that has only one spinning bear. Initially, the world will start
+; with one bear spinning in the center at the screen. Clicking the mouse at a spot on the
+; world will replace the old bear with a new bear at the new spot. You can do this part 
+; with only material up through compound. 
+; 
+; Once this is working you should expand the program to include an arbitrary number of bears.
+; ---------------------------------------------------------------------------------------------
+; 
+; Here is an image of a bear for you to use: .
+
+
+(require 2htdp/image)
+(require 2htdp/universe)
+
+;; Create a bear on mouse click position that contiuously spins counterclockwise
+;; at a constant speed
+
+
+;; =================
+;; Constants:
+
+(define WIDTH  600)
+(define HEIGHT 600)
+
+(define MTS (rectangle WIDTH HEIGHT "solid" "white"))
+
+(define BEAR-IMG .)
+
+(define BEAR-SPEED 10)
+
+;; =================
+;; Data definitions:
+
+(define-struct bear (x y angle))
+;; Bear is (make-bear Number Number Integer)
+;; interp. a bear at position x, y rotated at angle degrees
+
+(define BEAR-1 (make-bear (/ WIDTH 2) (/ HEIGHT 2) 0)) ;starting bear
+(define BEAR-2 (make-bear 100 200 -180))
+
+#;
+(define (fn-for-bear b)
+  (... (bear-x b)            ;Number
+       (bear-y b)            ;Number
+       (bear-angle b)))      ;Integer  
+
+;; Template rules used:
+;;  - compound: 3 fields
+
+
+;; ListOfBear is one of:
+;;  - empty
+;;  - (cons Bear ListOfBear)
+;; interp. a list of bears
+
+(define LOB-1 empty)
+(define LOB-2 (cons BEAR-1 empty))
+(define LOB-3 (cons BEAR-2 (cons BEAR-1 empty)))
+
+#;
+(define (fn-for-lob lob)
+  (cond [(empty? lob) (...)]
+        [else (... (fn-for-bear (first lob))
+                   (fn-for-lob (rest lob)))]))
+
+;; Template rules used:
+;;  - one of: 2 cases
+;;  - atomic distinct: empty
+;;  - compound: (cons Bear ListOfBear)
+;;  - reference: (first lob) is Bear
+;;  - self-reference: (rest lob) is ListOfBear
+
+
+
+;; =================
+;; Functions:
+
+;; ListOfBear -> ListOfBear
+;; start the world with (main empty)
+(define (main lob)
+  (big-bang lob                ;ListOfBear
+    (on-tick   rotate-bears)   ;ListOfBear -> ListOfBear
+    (to-draw   render-bears)   ;ListOfBear -> ListOfBear
+    (on-mouse  new-bear)))     ;ListOfBear Integer Integer MouseEvent -> ListOfBear
+
+;; ListOfBear -> ListOfBear
+;; rotate all bears
+(check-expect (rotate-bears LOB-1) empty)
+
+(check-expect (rotate-bears LOB-2)
+              (cons (make-bear (/ WIDTH 2) (/ HEIGHT 2)
+                               (+ BEAR-SPEED 0)) empty))
+
+(check-expect (rotate-bears LOB-3)
+              (cons (make-bear 100 200 (+ BEAR-SPEED -180))
+                    (cons (make-bear (/ WIDTH 2) (/ HEIGHT 2)
+                                     (+ BEAR-SPEED 0)) empty)))
+
+;(define (rotate-bears lob) lob) ;stub
+
+;<template from ListOfBear>
+(define (rotate-bears lob)
+  (cond [(empty? lob) empty]
+        [else (cons (rotate-single-bear (first lob))
+                    (rotate-bears (rest lob)))]))
+
+
+;; Bear -> Bear
+;; produce the next rotated bear
+(check-expect (rotate-single-bear (make-bear 0 0 0))
+              (make-bear 0 0 (+ BEAR-SPEED 0)))
+
+(check-expect (rotate-single-bear (make-bear 0 0 360))
+              (make-bear 0 0 (+ BEAR-SPEED 360)))
+
+;(define (rotate-single-bear b) b) ;stub
+
+;<template from Bear>
+(define (rotate-single-bear b)
+  (make-bear (bear-x b) (bear-y b)
+             (+ BEAR-SPEED (bear-angle b))))
+
+
+;; ListOfBear -> Image
+;; render the current list of bears
+(check-expect (render-bears empty) MTS)
+(check-expect (render-bears LOB-2)
+              (place-image
+               BEAR-IMG (/ WIDTH 2) (/ HEIGHT 2)
+               MTS))
+(check-expect (render-bears LOB-3)
+              (place-image
+               (rotate -180 BEAR-IMG) 100 200
+               (place-image
+                BEAR-IMG (/ WIDTH 2) (/ HEIGHT 2)
+                MTS)))
+
+;(define (render-bears lob) MTS)  ;stub
+
+;<template from ListOfBear>
+(define (render-bears lob)
+  (cond [(empty? lob) MTS]
+        [else (place-image
+               (render-single-bear (first lob))
+               (bear-x (first lob)) (bear-y (first lob))
+               (render-bears (rest lob)))]))
+
+
+;; Bear -> Image
+;; render the current bear; modulo of -360 is used to ensure counterclockwise
+;; rotation; can be changed to 360 (i.e., to positive) for clockwise
+(check-expect (render-single-bear BEAR-1) BEAR-IMG)
+
+(check-expect (render-single-bear BEAR-2)
+              (rotate -180 BEAR-IMG))
+
+(check-expect (render-single-bear (make-bear 100 200 -400))
+              (rotate (modulo -400 -360) BEAR-IMG))
+
+;(define (render-single-bear b) b)  ;stub
+
+;<template from Bear>
+(define (render-single-bear b)
+  (rotate (modulo (bear-angle b) -360) BEAR-IMG))
+
+;; ListOfBear Integer Integer MouseEvent -> ListOfBear
+;; create a new bear on mouse click at MouseEvent location
+(check-expect (new-bear empty 324 247 "drag") empty)
+(check-expect (new-bear empty 324 247 "button-down")
+              (cons (make-bear 324 247 0) empty))
+
+(check-expect (new-bear LOB-2 266 10 "drag") LOB-2)
+(check-expect (new-bear LOB-2 266 10 "button-down")
+              (cons (make-bear 266 10 0) LOB-2))
+
+(check-expect (new-bear LOB-3 50 10 "drag") LOB-3)
+(check-expect (new-bear LOB-3 50 10 "button-down")
+              (cons (make-bear 50 10 0) LOB-3))
+
+;(define (new-bear lob x y me) lob)  ;stub
+
+;<template from MouseEvent>
+(define (new-bear lob x y me)
+  (cond [(mouse=? me "button-down") (cons (make-bear x y 0) lob)]
+        [else lob]))

@@ -1,0 +1,71 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2. student-solution (mine) export|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+;; student-starter.rkt
+
+;; =================
+;; Data definitions:
+
+; 
+; PROBLEM A:
+; 
+; Design a data definition to help a teacher organize their next field trip. 
+; On the trip, lunch must be provided for all students. For each student, track 
+; their name, their grade (from 1 to 12), and whether or not they have allergies.
+; 
+
+
+(define-struct student (name grade allergies))
+;; Student is (make-student String Natural[1, 12] Boolean)
+;; interp. student's name, grade (from 1 to 12) and whether they have allergies
+
+(define S1 (make-student "Peter"    7   true))
+(define S2 (make-student "George"   12  false))
+(define S3 (make-student "Michael"  6   false))
+(define S4 (make-student "Veronica" 6   true))
+(define S5 (make-student "Victoria" 5   false))
+(define S6 (make-student "Maria"    5   true))
+
+#;
+(define (fn-for-student s)
+  (... (student-name      s)    ;String
+       (student-grade     s)    ;Natural[1, 12]
+       (student-allergies s)))  ;Boolean
+
+;; Template rules used:
+;;   - compound: 3 fields
+
+;; =================
+;; Functions:
+
+; 
+; PROBLEM B:
+; 
+; To plan for the field trip, if students are in grade 6 or below, the teacher 
+; is responsible for keeping track of their allergies. If a student has allergies, 
+; and is in a qualifying grade, their name should be added to a special list. 
+; Design a function to produce true if a student name should be added to this list.
+; 
+
+
+;; Student -> Boolean
+;; produces true if a student is in grade 6 or below and has allergies, else false
+
+;(define (add-to-track-list s) false) ;stub
+
+(check-expect (add-to-track-list S1) false)
+(check-expect (add-to-track-list S2) false)
+(check-expect (add-to-track-list S3) false)
+(check-expect (add-to-track-list S4) true)
+(check-expect (add-to-track-list S5) false)
+(check-expect (add-to-track-list S6) true)
+
+;<template from Student>
+(define (add-to-track-list s)
+  (and (student-allergies  s)
+       (< (student-grade   s) 7)))
+
+;; Note after seeing the answer:
+;; allergies and add-to-track-list are Booleans so they must become:
+;; allergies? ; add-to-track-list? due to naming conventions in BSL
