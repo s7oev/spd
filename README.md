@@ -1,16 +1,16 @@
 # Systematic Program Design
 
 ## What is this repo?
-s7oev/spd is my proof that I have finished the courses **Systematic Program Design - Part 1 (SPD1x)** and **Systematic Program Design - Part 2 (SPD1x)**. Both are available on edX: [SPD1x](https://courses.edx.org/courses/course-v1:UBCx+SPD1x+2T2015/course/) / [SPD2x](https://courses.edx.org/courses/course-v1:UBCx+SPD2x+2T2015/course/), however were offered as MOOCs in 2015 so they are currently archived, meaning all material can be accessed but the staff is not available for support and no official certificates can be granted.
+s7oev/spd is my proof that I have finished the courses **Systematic Program Design - Part 1 (SPD1x)**, **Systematic Program Design - Part 2 (SPD2x)** and **Systematic Program Design - Part 3 (SPD3x)**. All three are available on edX: [SPD1x](https://courses.edx.org/courses/course-v1:UBCx+SPD1x+2T2015/course/) / [SPD2x](https://courses.edx.org/courses/course-v1:UBCx+SPD2x+2T2015/course/) / [SPD3x](https://courses.edx.org/courses/course-v1:UBCx+SPD3x+3T2015/course/), however, were offered as MOOCs in 2015 so they are currently archived, meaning all material can be accessed but the staff is not available for support and no official certificates can be granted.
 
-So, this repo shows all my work in the two courses, including solutions to the recommended problems, as well as the quizzes. The latter can be design quizzes - in which case my code is shown, or multiple choice - in which case a PDF is attached. Keep in mind that the functional programming language used in this course is Racket-based (which itself is a dialect of Lisp). Because of this, DrRacket is necessary to preview properly the code. I have made exports of my solutions, yet they may have some missing data sometimes - because DrRacket allows the direct input of images, which cannot obviously be achieved in the text-only export. Yet, obviously, the actual code will be perfectly readable from the exports.
+So, this repo shows all my work in the courses, including solutions to the recommended problems, as well as the quizzes. The latter can be design quizzes - in which case my code is shown, or multiple choice - in which case a PDF is attached. Keep in mind that the functional programming language used in this course is Racket-based (which itself is a dialect of Lisp). Because of this, DrRacket is necessary to preview properly the code. I have made exports of my solutions, yet they may have some missing data sometimes - because DrRacket allows the direct input of images, which cannot obviously be achieved in the text-only export. Yet, obviously, the actual code will be perfectly readable from the exports.
 
 Most folders will have the following structure:  
-1\. **_(problem name)-starter.rkt_** :: problem statement  
-2\. **_(problem name)-solution (mine) export.txt_** :: my solution exported to txt  
-2\. **_(problem name)-solution (mine).rkt_** :: my solution  
-2\. **_(problem name)-solution (mine).rkt~_** :: DrRacket temporary file (ignore)  
-3\. **_(problem name)-solution.rkt_** :: official (from course staff) solution  
+**_1\. (problem name)-starter.rkt_** :: problem statement  
+**_2\. (problem name)-solution (mine) export.txt_** :: my solution exported to txt  
+**_2\. (problem name)-solution (mine).rkt_** :: my solution  
+**_2\. (problem name)-solution (mine).rkt~_** :: DrRacket temporary file (ignore)  
+**_3\. (problem name)-solution.rkt_** :: official (from course staff) solution  
 
 ## Syllabus Part 1
 
@@ -196,3 +196,81 @@ Most folders will have the following structure:
 
 </tbody>
 </table>
+
+## Syllabus Part 3
+
+<table>
+<tbody>
+<tr>
+  <th rowspan="2">Week</th>
+  <th width="25%">Module Name</th>
+  <th>Lectures</th>
+  <th>Time to complete</th>
+  <th>Practice Problems</th>
+  <th rowspan="2" width="14%">Quiz</th>
+</tr>
+<tr>
+  <th colspan="4">Overall learning goal</th>
+</tr>
+<tr>
+  <td rowspan="2">9</td>
+  <td><strong>Abstraction</strong></td>
+  <td>7</td>
+  <td>8-12 Hours</td>
+  <td>3</td>
+  <td rowspan ="2"><i>Multiple Choice Design Quiz</i></td>
+</tr>
+<tr>
+  <td colspan="4">Learn how to design functions that are more general and versatile using abstraction.</td>
+</tr>
+<tr>
+  <td rowspan="4">10</td>
+  <td><strong>Generative Recursion</strong></td>
+  <td>3</td>
+  <td>5-6 Hours</td>
+  <td>2</td>
+  <td rowspan ="4"><i>Multiple Choice Design Quiz</i></td>
+</tr>
+<tr>
+  <td colspan="4">Learn how to use generative recursion to create fractals.</td>
+</tr>
+<tr>
+  <td><strong>Search</strong></td>
+  <td>9</td>
+  <td>8-9 Hours</td>
+  <td>0</td>
+</tr>
+<tr>
+  <td colspan="4">Expand on generative recursion to solve search problems, such as Sudoku.</td>
+</tr>
+<tr>
+  <td rowspan="2">11</td>
+  <td><strong>Accumulators</strong></td>
+  <td>5</td>
+  <td>9-10 Hours</td>
+  <td>3</td>
+  <td rowspan ="2"><i>Multiple Choice Design Quiz</i></td>
+</tr>
+<tr>
+  <td colspan="4">Learn how and when to use accumulators in several ways.</td>
+</tr>
+<tr>
+  <td rowspan="2">12</td>
+  <td><strong>Graphs</strong></td>
+  <td>4</td>
+  <td>7-8 Hours</td>
+  <td>3</td>
+  <td rowspan ="2"><i>Multiple Choice Design Quiz</i></td>
+</tr>
+<tr>
+  <td colspan="4">Learn to identify when information naturally forms a graph, and learn to write functions operatingon such data.</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+    </div>
+</div>
+
+</div>
