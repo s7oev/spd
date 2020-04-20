@@ -272,5 +272,3 @@ Most folders will have the following structure:
 
     </div>
 </div>
-
-</div>
